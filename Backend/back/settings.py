@@ -22,11 +22,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-j-#j-uzt!fu4fq)=*0$&bv69+yg1px@8!w!hsk*m3r5%d$de0('
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -64,7 +64,8 @@ ROOT_URLCONF = 'back.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'static', 'capstone-cra', 'public')],
+        'DIRS': [os.path.join(BASE_DIR, 'static', 'front', 'build'),
+                 os.path.join(BASE_DIR / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,7 +80,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'back.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -93,8 +93,6 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -131,19 +129,18 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-    # os.path.join(BASE_DIR, 'static/capstone-cra/build'),
-    # os.path.join(BASE_DIR, 'static/capstone-cra/build/static'),
-    # os.path.join(BASE_DIR, 'static/capstone-cra/build/static/css'),
-    # os.path.join(BASE_DIR, 'static/capstone-cra/build/static/js'),
-    # os.path.join(BASE_DIR, 'static/capstone-cra/build/static/media'),
+    #os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static/front/build'),
+    os.path.join(BASE_DIR, 'static/front/build/static'),
+    os.path.join(BASE_DIR, 'static/front/build/static/css'),
+    os.path.join(BASE_DIR, 'static/front/build/static/js'),
+    os.path.join(BASE_DIR, 'static/front/build/static/media')
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'staticfiles')
@@ -151,7 +148,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'staticfiles')
 STATICFILES_EXCLUDE = [
     'node_modules',
 ]
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
