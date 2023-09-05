@@ -20,6 +20,7 @@ from django.conf import settings
 from django.core.cache import cache
 from collections import defaultdict
 import pytz
+#import model_preprocess
 
 
 # Create your views here.
@@ -334,7 +335,7 @@ def handle_uploaded_file(uploaded_file):
     uploaded_file_url = fs.url(filename)
     print(f"fs : {fs}, filename : {filename}, uploaded_file_url : {uploaded_file_url}")
     return uploaded_file_url
-
+    
 
 # model 예측(torchserve)
 @csrf_exempt
@@ -342,30 +343,40 @@ def prediction(image_path):
     # 이미지 파일 열기
     with open(image_path, 'rb') as f:
         image_data = f.read() # 이미지
+    print("-------------------",image_path)
+    # FastAPI 호출
+    url = 'http://0.0.0.0:8001/img_object_detection_to_json'
+    files = {'file': (image_path.split("/")[-1], open(image_path, 'rb'), 'image/jpeg')}
+    headers = {'accept': 'application/json'}
 
-    # torchserve API 호출
-    url = 'http://localhost:8080/predictions/model1'  # torchserve의 예측 엔드포인트 URL
-    headers = {'Content-Type': 'application/octet-stream'}
-    response = requests.post(url, headers=headers, data=image_data)
+    response = requests.post(url, files=files, headers=headers)
 
     # 결과 확인
-    if response.status_code == 200:
+    if response.status_code == 200 :
         result = response.json()
-        sorted_data = sorted(result.items(), key=lambda x: x[1], reverse=True) # value 값으로 정렬
-        sorted_keys = [item[0] for item in sorted_data]
-        label_path = os.path.join(settings.STATIC_ROOT, 'model_label.json')
-        label_data = read_json_file(label_path)
-        top5 = {}
+        food_list = ['dummy']
+        confi_list = [0]
+        for i in result["detect_objects"] :
+            print(i)
+            food_list.append(i["name"])
+            confi_list.append(i["confidence"])
+        #sorted_data = sorted(result.items(), key=lambda x: x[1], reverse=True) # value 값으로 정렬
+        #sorted_keys = [item[0] for item in sorted_data]
 
-        for key in sorted_keys:
-            label = label_data[key]
-            prob = result[key]
-            top5[label] = prob
 
-        top5_json = json.dumps(top5) # json 파일로 변환
-        print("성공")
-        print(f"분류 결과 : {top5_json}")
-        return list(top5.keys())[0] # top 1의 음식 이름
+        #label_path = os.path.join(settings.STATIC_ROOT, 'model_label.json')
+        #label_data = read_json_file(label_path)
+        #top5 = {}
+
+        #for key in sorted_keys:
+        #    label = label_data[key]
+        #    prob = result[key]
+        #    top5[label] = prob
+
+        #top5_json = json.dumps(top5) # json 파일로 변환
+        #print("성공")
+        #print(f"분류 결과 : {top5_json}")
+        return food_list[0] # top 1의 음식 이름
     else:
         print("실패")
         return None
