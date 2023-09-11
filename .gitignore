@@ -8,3 +8,4 @@ FoodSAM/ckpts/SETR_MLA/*
 FoodSAM/ckpts/*
 FoodSAM/iamges
 *.ipynb
+*.ipynb_checkpoints
