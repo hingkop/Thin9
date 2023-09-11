@@ -1,2 +1,11 @@
 food_meta.csv
 /Test_img
+__pycache__/
+FoodSAM/output_panoptic/
+FoodSAM/output_semantic/
+FoodSAM/ckpts/SETR_MLA/*
+!FoodSAM/ckpts/SETR_MLA/.gitkeep
+FoodSAM/ckpts/*
+FoodSAM/iamges
+*.ipynb
+*.ipynb_checkpoints
