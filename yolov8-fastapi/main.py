@@ -18,6 +18,9 @@ from app import detect_sample_model
 from app import add_bboxs_on_img
 from app import get_bytes_from_image
 
+from .FoodSAM.FoodSAM.panoptic import panoptic
+
+
 ####################################### logger #################################
 
 logger.remove()
@@ -177,3 +180,10 @@ def img_object_detection_to_img(file: bytes = File(...)):
     # return image in bytes format
     return StreamingResponse(content=get_bytes_from_image(final_image), media_type="image/jpeg")
 
+
+@app.post("/img_semantic_segmentation_to_array")
+def img_semantic_segmentation_to_array(file_dir: str, output_dir: str):
+    
+    return panoptic(file_dir, output_dir)
+    
+    
